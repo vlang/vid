@@ -1,4 +1,4 @@
-// Copyright (c) 2019 Alexander Medvednikov. All rights reserved.
+// Copyright (c) 2019-2021 Alexander Medvednikov. All rights reserved.
 // Use of this source code is governed by a GPL license
 // that can be found in the LICENSE file.
 module main
@@ -8,10 +8,11 @@ import os
 import time
 import uiold
 import strings
-//import sokol.sapp
+// import sokol.sapp
 import clipboard
 
 // import darwin
+
 const (
 	settings_path     = os.join_path(os.home_dir(), '.ved')
 	codeblog_path     = os.join_path(os.home_dir(), 'code', 'blog')
@@ -647,7 +648,7 @@ fn on_char(code u32, mut ved Ved) {
 		return
 	}
 	buf := [0, 0, 0, 0, 0]
-	s := utf32_to_str_no_malloc(code, buf) // .data)
+	s := unsafe { utf32_to_str_no_malloc(code, buf) } // .data)
 	// s := utf32_to_str(code)
 	// println('s="$s" code="$code"')
 	match ved.mode {
@@ -1759,7 +1760,7 @@ fn (mut ved Ved) loop() {
 		ved.now = time.now()
 		ved.gg.refresh_ui()
 		// ved.timer.tick(vid)
-		time.sleep(5)
+		time.wait(5 * time.second)
 	}
 }
 
